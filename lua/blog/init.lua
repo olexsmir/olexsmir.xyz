@@ -19,6 +19,16 @@ local function write_page(fpath, node)
   write(fpath, html.render_page(node))
 end
 
+local function write_gopkg(name, repo)
+  write(
+    name .. ".html",
+    html.render_page(pages.with_gopkg {
+      name = name,
+      repo = repo,
+    })
+  )
+end
+
 function blog.build()
   --- clean up
   if file.is_dir(c.build.output) then
@@ -45,6 +55,8 @@ function blog.build()
   write_page("404.html", pages.not_found())
   write_page("index.html", pages.home())
   write_page("posts.html", pages.posts(posts))
+
+  write_gopkg("rfcr", "https://github.com/olexsmir/rfcr")
 
   -- stylua: ignore
   write("feed.xml", rss.rss(posts, {

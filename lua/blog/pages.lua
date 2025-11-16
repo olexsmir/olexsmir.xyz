@@ -67,6 +67,32 @@ local function with_page(o)
   })
 end
 
+---@param o {name:string, repo:string}
+function pages.with_gopkg(o)
+  local path = c.cname .. "/" .. o.name
+  local goi = path .. " git " .. o.repo
+  local gos = table.concat({
+    path,
+    o.repo,
+    o.repo .. "/tree/master{/dir}",
+    o.repo .. "/blob/master{/dir}/{file}#L{line}",
+  }, " ")
+
+  return h.el("html", {}, {
+    h.el("head", {
+      a.attr("xmlns", "http://www.w3.org/1999/xhtml"),
+      a.attr("xml:lang", "en"),
+      a.attr("lang", "en"),
+    }, {
+      h.meta { a.attr("http-equiv", "content-type"), a.attr("content", "text/html; charset=utf-8") },
+      h.meta { a.attr("http-equiv", "refresh"), a.attr("content", "0; url=" .. o.repo) },
+      h.meta { a.attr("name", "go-import"), a.attr("content", goi) },
+      h.meta { a.attr("name", "go-source"), a.attr("content", gos) },
+    }),
+    h.el("body", {}, { h.text "Redirecting to the forge..." }),
+  })
+end
+
 function pages.home()
   return with_page {
     title = "olexsmir.xyz",
