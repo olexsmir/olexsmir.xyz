@@ -1,16 +1,17 @@
 local a = require "lego.html.attribute"
 local html = {}
 
----@class lego.HtmlNote
+---@alias lego.HtmlNode lego._HtmlNote|string
+
+---@class lego._HtmlNote
 ---@field tag string
----@field text? string
 ---@field attributes lego.HtmlAttribute[]
----@field children lego.HtmlNote[]
+---@field children lego._HtmlNote[]
 
 ---@param tag string
 ---@param attributes lego.HtmlAttribute[]
----@param children lego.HtmlNote[]
----@return lego.HtmlNote
+---@param children lego.HtmlNode[]
+---@return lego.HtmlNode
 function html.el(tag, attributes, children)
   local attrs = {}
   for _, attr_table in ipairs(attributes or {}) do
@@ -27,15 +28,33 @@ function html.el(tag, attributes, children)
 end
 
 ---@param text string
----@return lego.HtmlNote
+---@return lego.HtmlNode
 function html.text(text)
-  return { text = text }
+  return text
 end
 
 ---@param html_str string
----@return lego.HtmlNote
+---@return lego.HtmlNode
 function html.raw(html_str)
-  return { text = html_str }
+  return html_str
+end
+
+---@param txts string[]
+---@return string[]
+function html.tt(txts)
+  local tt = vim
+    .iter(txts)
+    :map(function(txt)
+      return { txt, " " }
+    end)
+    :flatten()
+    :totable()
+
+  if tt[#tt] == " " then
+    table.remove(tt, #tt)
+  end
+
+  return tt
 end
 
 local _self_closing_tags = {
@@ -54,12 +73,12 @@ local _self_closing_tags = {
   wbr = {},
 }
 
----@param node lego.HtmlNote
+---@param node lego.HtmlNode
 ---@return string
 function html.render(node)
-  if node.text then
-    return node.text
-  elseif node.tag then
+  if type(node) == "string" then
+    return node
+  elseif type(node) == "table" and node.tag then
     local attr_keys = {}
     for k in pairs(node.attributes or {}) do
       table.insert(attr_keys, k)
@@ -82,7 +101,6 @@ function html.render(node)
 
     return string.format("<%s%s>%s</%s>", node.tag, attrs_str, children_str, node.tag)
   end
-
   return ""
 end
 
@@ -94,49 +112,53 @@ end
 -- stylua: ignore start
 
 ---@param attributes lego.HtmlAttribute[]
----@param children lego.HtmlNote[]
+---@param children lego.HtmlNode[]
 function html.div(attributes, children) return html.el("div", attributes, children) end
 
 ---@param attributes lego.HtmlAttribute[]
----@param children lego.HtmlNote[]
+---@param children lego.HtmlNode[]
 function html.main(attributes, children) return html.el("main", attributes, children) end
 
 ---@param attributes lego.HtmlAttribute[]
 function html.meta(attributes) return html.el("meta", attributes, {}) end
 
 ---@param attributes lego.HtmlAttribute[]
----@param children lego.HtmlNote[]
+---@param children lego.HtmlNode[]
 function html.span(attributes, children) return html.el("span", attributes, children) end
 
 ---@param attributes lego.HtmlAttribute[]
----@param children lego.HtmlNote[]
+---@param children lego.HtmlNode[]
 function html.p(attributes, children) return html.el("p", attributes, children) end
 
 ---@param attributes lego.HtmlAttribute[]
----@param children lego.HtmlNote[]
+---@param children lego.HtmlNode[]
 function html.a(attributes, children) return html.el("a", attributes, children) end
 
 ---@param attributes lego.HtmlAttribute[]
----@param children lego.HtmlNote[]
+---@param children lego.HtmlNode[]
 function html.ul(attributes, children) return html.el("ul", attributes, children) end
 
 ---@param attributes lego.HtmlAttribute[]
----@param children lego.HtmlNote[]
+---@param children lego.HtmlNode[]
 function html.li(attributes, children) return html.el("li", attributes, children) end
 
 ---@param attributes lego.HtmlAttribute[]
----@param children lego.HtmlNote[]
+---@param children lego.HtmlNode[]
 function html.title(attributes, children) return html.el("title", attributes, children) end
 
 ---@param attributes lego.HtmlAttribute[]
 function html.link(attributes) return html.el("link", attributes, {}) end
 
 ---@param attributes lego.HtmlAttribute[]
----@param children lego.HtmlNote[]
+---@param children lego.HtmlNode[]
 function html.h1(attributes, children) return html.el("h1", attributes, children) end
 
 ---@param attributes lego.HtmlAttribute[]
----@param children lego.HtmlNote[]
+---@param children lego.HtmlNode[]
+function html.h2(attributes, children) return html.el("h2", attributes, children) end
+
+---@param attributes lego.HtmlAttribute[]
+---@param children lego.HtmlNode[]
 function html.nav(attributes, children) return html.el("nav", attributes, children) end
 
 function html.br() return html.el("br", {}, {}) end
