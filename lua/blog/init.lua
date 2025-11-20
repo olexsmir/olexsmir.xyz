@@ -53,7 +53,7 @@ function blog.build()
   write("sitemap.xml", sitemap.sitemap(posts, { site_url = c.url }))
   write("style.css", css.style(styles))
   write_page("404.html", pages.not_found())
-  write_page("index.html", pages.home())
+  write_page("index.html", pages.home(posts))
   write_page("posts.html", pages.posts(posts))
 
   write_gopkg("rfcr", "https://github.com/olexsmir/rfcr")

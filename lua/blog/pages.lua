@@ -6,22 +6,20 @@ local pages = {}
 local function themeSwitcherScript()
   local s = [[
     const root = document.documentElement;
-    root.dataset.theme = localStorage.theme || 'light';
+    root.dataset.theme = localStorage.theme || 'dark';
     document.getElementById('theme-toggle').onclick = () => {
       root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
       localStorage.theme = root.dataset.theme;
     };
   ]]
-
   s = s:gsub("  ", "")
   s = vim.split(s, "\n") ---@diagnostic disable-line: cast-local-type
   s = table.concat(s, "")
-
   return h.el("script", {}, { h.text(s) })
 end
 
----@param o {title:string, desc:string, has_code:boolean, body:lego.HtmlNote[]}
----@return lego.HtmlNote
+---@param o {title:string, desc:string, has_code:boolean, body:lego.HtmlNode[]}
+---@return lego.HtmlNode
 local function with_page(o)
   return h.el("html", { a.attr("lang", "en") }, {
     h.el("head", {}, {
@@ -50,21 +48,41 @@ local function with_page(o)
       h.el("header", {}, {
         h.nav({}, {
           h.p({}, {
+            h.a({ a.class "visual-hidden", a.href "#main" }, { "Skip to content" }),
             h.a({ a.href "/" }, { h.text "home" }),
             h.a({ a.href "/posts" }, { h.text "posts" }),
-            h.a({ a.href "https://github.com/olexsmir" }, { h.text "github" }),
             h.a({ a.href "/feed.xml" }, { h.text "feed" }),
             h.el("button", { a.id "theme-toggle" }, { h.text "🌓" }),
           }),
         }),
-        h.a({ a.class "title", a.href "/" }, {
-          h.h1({}, { h.text(c.title) }),
-        }),
       }),
-      o.body,
+      h.main({ a.id "main" }, o.body),
       themeSwitcherScript(),
     }),
   })
+end
+
+---@param iter Iter
+---@return string|lego._HtmlNote
+local function list_posts(iter)
+  return h.ul(
+    { a.class "blog-posts" },
+    iter
+      ---@param post lego.Post
+      :filter(function(post)
+        return not post.hidden
+      end)
+      ---@param post lego.Post
+      :map(function(post)
+        return h.li({}, {
+          h.span({}, {
+            h.el("i", {}, { h.time(post.meta.date) }),
+          }),
+          h.a({ a.href(post.meta.slug) }, { h.text(post.meta.title) }),
+        })
+      end)
+      :totable()
+  )
 end
 
 ---@param o {name:string, repo:string}
@@ -93,24 +111,40 @@ function pages.with_gopkg(o)
   })
 end
 
-function pages.home()
+---@param posts lego.Post[]
+function pages.home(posts)
   return with_page {
     title = "olexsmir.xyz",
     desc = "olexsmir.xyz home page",
-    body = h.main({}, {
+    body = {
+      h.h2({}, { "Hi, I'm Olex from Ukraine 🇺🇦" }),
       h.p({}, {
-        h.text "Hi, and welcome to my blog.",
-        h.br(),
-        h.text "I'm a gopher from Ukraine 🇺🇦, still don't know how to exit from vim.",
+        "Welcome to my corner of the internet. Here I share what I find interesting. ",
+        "Hopefully I will maintain the content on this site, not only it’s code.",
       }),
       h.p({}, {
-        h.text "If you want to reach me, you can mail me at: ",
-        h.a({ a.href("mailto:" .. c.email) }, {
-          h.el("i", {}, { h.text(c.email) }),
-        }),
-        h.text ".",
+        "Feel free to scroll through the posts below or subscribe to the ",
+        h.a({ a.href "/feed.xml" }, { "RSS feed" }),
+        " for updates. ",
+        "And if you want to say hi, mail me at ",
+        h.a({ a.href("mailto:" .. c.email) }, { c.email }),
+        " or message me on ",
+        h.a({ a.href "https://t.me/olexsmir" }, { "telegram" }),
+        " if that's your cup of tea.",
       }),
-    }),
+      h.p({}, {
+        "If you’re curious what I’m up to, check out ",
+        h.a({ a.href "/now" }, { "now" }),
+        " page, or look through ",
+        h.a({ a.href "https://github.com/olexsmir" }, { "github" }),
+        " or ",
+        h.a({ a.href "https://tangled.org/olexsmir.xyz" }, { "tangled" }),
+        " accounts.",
+      }),
+      h.div({ a.class "recent-posts" }, {
+        list_posts(vim.iter(posts):take(7)),
+      }),
+    },
   }
 end
 
@@ -118,13 +152,13 @@ function pages.not_found()
   return with_page {
     title = "Not found",
     desc = "Page you're looking for, not found",
-    body = h.main({}, {
+    body = {
       h.h1({}, { h.text "There's nothing here!" }),
       h.p({}, {
         h.text "Go pack to the ",
         h.a({ a.href "/" }, { h.text "home page" }),
       }),
-    }),
+    },
   }
 end
 
@@ -133,26 +167,7 @@ function pages.posts(posts)
   return with_page {
     title = "All olexsmir's posts",
     desc = "List of all blog posts on the lego.",
-    body = h.main({}, {
-      h.p({}, { h.text "It ain't much, but it's honest work." }),
-      h.ul(
-        { a.class "blog-posts" },
-        vim
-          .iter(posts)
-          :filter(function(post)
-            return not post.hidden
-          end)
-          :map(function(post)
-            return h.li({ a.href(post.meta.slug) }, {
-              h.span({}, {
-                h.el("i", {}, { h.time(post.meta.date) }),
-              }),
-              h.a({ a.href(post.meta.slug) }, { h.text(post.meta.title) }),
-            })
-          end)
-          :totable()
-      ),
-    }),
+    body = { list_posts(vim.iter(posts)) },
   }
 end
 
@@ -162,13 +177,13 @@ function pages.post(post)
     title = post.meta.title,
     desc = "Blog post titled: " .. post.meta.title,
     has_code = post.content:match "code" ~= nil,
-    body = h.main({}, {
+    body = {
       h.div({ a.class "blog-title" }, {
         h.h1({}, { h.text(post.meta.title) }),
         h.p({}, { h.time(post.meta.date) }),
       }),
       h.raw(post.content),
-    }),
+    },
   }
 end
 
