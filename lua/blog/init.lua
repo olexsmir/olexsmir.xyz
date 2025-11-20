@@ -19,14 +19,9 @@ local function write_page(fpath, node)
   write(fpath, html.render_page(node))
 end
 
-local function write_gopkg(name, repo)
-  write(
-    name .. ".html",
-    html.render_page(pages.with_gopkg {
-      name = name,
-      repo = repo,
-    })
-  )
+local function write_gopkg(name, repo, branch)
+  branch = branch or "main"
+  write(name .. ".html", html.render_page(pages.gopkg(name, repo, branch)))
 end
 
 function blog.build()
@@ -56,7 +51,7 @@ function blog.build()
   write_page("index.html", pages.home(posts))
   write_page("posts.html", pages.posts(posts))
 
-  write_gopkg("rfcr", "https://github.com/olexsmir/rfcr")
+  write_gopkg("rfcr", "https://tangled.org/olexsmir.xyz/rfcr")
 
   -- stylua: ignore
   write("feed.xml", rss.rss(posts, {

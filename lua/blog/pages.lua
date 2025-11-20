@@ -85,32 +85,6 @@ local function list_posts(iter)
   )
 end
 
----@param o {name:string, repo:string}
-function pages.with_gopkg(o)
-  local path = c.cname .. "/" .. o.name
-  local goi = path .. " git " .. o.repo
-  local gos = table.concat({
-    path,
-    o.repo,
-    o.repo .. "/tree/master{/dir}",
-    o.repo .. "/blob/master{/dir}/{file}#L{line}",
-  }, " ")
-
-  return h.el("html", {}, {
-    h.el("head", {
-      a.attr("xmlns", "http://www.w3.org/1999/xhtml"),
-      a.attr("xml:lang", "en"),
-      a.attr("lang", "en"),
-    }, {
-      h.meta { a.attr("http-equiv", "content-type"), a.attr("content", "text/html; charset=utf-8") },
-      h.meta { a.attr("http-equiv", "refresh"), a.attr("content", "0; url=" .. o.repo) },
-      h.meta { a.attr("name", "go-import"), a.attr("content", goi) },
-      h.meta { a.attr("name", "go-source"), a.attr("content", gos) },
-    }),
-    h.el("body", {}, { h.text "Redirecting to the forge..." }),
-  })
-end
-
 ---@param posts lego.Post[]
 function pages.home(posts)
   return with_page {
@@ -185,6 +159,27 @@ function pages.post(post)
       h.raw(post.content),
     },
   }
+end
+
+function pages.gopkg(name, repo, branch)
+  local gomod = c.name .. "/" .. name
+  local go_import = gomod .. " git " .. repo
+  local go_source = table.concat({
+    gomod,
+    repo,
+    repo .. "/tree/" .. branch .. "{/dir}",
+    repo .. "/blob/" .. branch .. "{/dir}/{file}#L{line}",
+  }, "")
+
+  return h.el("html", {}, {
+    h.el("head", {}, {
+      h.meta { a.attr("name", "go-import"), a.attr("content", go_import) },
+      h.meta { a.attr("name", "go-source"), a.attr("content", go_source) },
+      h.meta { a.attr("http-equiv", "content-type"), a.attr("content", "text/html; charset=utf-8") },
+      h.meta { a.attr("http-equiv", "refresh"), a.attr("content", "0; url=" .. repo) },
+    }),
+    h.el("body", {}, { "Redirecting to the forge..." }),
+  })
 end
 
 return pages
