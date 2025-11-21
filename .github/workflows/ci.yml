@@ -1,4 +1,4 @@
-name: publish
+name: ci
 
 on:
   workflow_dispatch:
@@ -11,25 +11,32 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Push
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go/go.mod
+          cache-dependency-path: go/go.mod
+
       - name: Install nvim
         uses: rhysd/action-setup-vim@v1
         with:
           neovim: true
           version: nightly
 
-      - uses: actions/checkout@v4
+      - name: build markdown parser
+        run: make build-parser
 
-      - name: install chroma
+      - name: tests
         run: |
-          wget https://github.com/alecthomas/chroma/releases/download/v2.20.0/chroma-2.20.0-linux-amd64.tar.gz
-          tar -xzf chroma-2.20.0-linux-amd64.tar.gz
-          sudo mv chroma /usr/local/bin/chroma
-          chroma --version
+          nvim --version
+          make test
 
       - name: build
         run: make build
 
-      - name: push to site branch
+      - name: publish
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self

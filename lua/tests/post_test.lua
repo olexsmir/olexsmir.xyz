@@ -11,7 +11,7 @@ post["read fixture"] = function()
   t.eq(inp.meta.title, "This is fixture")
   t.eq(inp.meta.desc, "testing testers test")
 
-  t.eq(inp.content, "<h1>Content</h1>\n<p>Here's the content.</p>")
+  t.eq(inp.content, "<h1>Content</h1>\n<p>Here's the content.</p>\n")
 end
 
 post["sort_by_date"] = function()

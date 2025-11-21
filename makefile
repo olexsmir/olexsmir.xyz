@@ -1,9 +1,12 @@
-.PHONY: all build test
+.PHONY: all build build-parser test
 
 CMD=nvim --clean -u ./lua/minit.lua
 
 test:
 	@$(CMD) --headless -c "lua MiniTest.run()"
+
+build-parser:
+	@cd go; go build -buildmode=c-shared -o liblego.so
 
 build:
 	@$(CMD) -l ./lua/build.lua

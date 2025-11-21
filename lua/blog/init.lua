@@ -1,7 +1,7 @@
 local css = require "lego.css"
 local file = require "lego.file"
-local highlighter = require "lego.highlighter"
 local html = require "lego.html"
+local liblego = require "liblego"
 local post = require "lego.post"
 local rss = require "lego.rss"
 local sitemap = require "lego.sitemap"
@@ -44,7 +44,7 @@ function blog.build()
   post.list_duplicates(posts)
 
   write("CNAME", c.cname)
-  write("chroma.css", highlighter.css(c.build.chroma_theme))
+  write("chroma.css", liblego.get_css(c.build.chroma_theme))
   write("sitemap.xml", sitemap.sitemap(posts, { site_url = c.url }))
   write("style.css", css.style(styles))
   write_page("404.html", pages.not_found())
@@ -65,7 +65,6 @@ function blog.build()
 
   for _, p in pairs(posts) do
     local phtml = html.render_page(pages.post(p))
-    phtml = highlighter.html(phtml, c.build.chroma_theme)
     write(p.meta.slug .. ".html", phtml)
   end
 end
