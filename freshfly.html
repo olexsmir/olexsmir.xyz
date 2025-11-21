@@ -3,14 +3,15 @@
 <h1>The solution.</h1>
 <p>We'll be using <a href="https://fly.io">fly.io</a>
 they have a generous <a href="https://fly.io/docs/about/pricing">free allowance</a>.</p>
-<h2>Setting up </h2>
+<h2>Setting up</h2>
 <p>First, you have to <a href="https://fly.io/app/sign-up">sign up for fly account</a>.
-<a href="https://fly.io/docs/flyctl/install">Get their cli</a>, and login with <code>flyctl auth login</code>. </p>
+<a href="https://fly.io/docs/flyctl/install">Get their cli</a>, and login with <code>flyctl auth login</code>.</p>
 <h2>Deploying FreshRSS</h2>
 <p>Create a directory where you'll store the <code>fly.toml</code> file, <code>cd</code> into this directory, we'll do our magic.</p>
 <p>Now, we need to create an app on fly.io, using the following command:</p>
 <pre class="chroma"><code><span class="line"><span class="cl">flyctl app create --save
-</span></span></code></pre><p>After this, you'll get an auto-generated <code>fly.toml</code> file.
+</span></span></code></pre>
+<p>After this, you'll get an auto-generated <code>fly.toml</code> file.
 <br>
 Modify it to look like this (<strong>don't change the app name</strong>):</p>
 <pre class="chroma"><code><span class="line"><span class="cl"><span class="nx">app</span> <span class="p">=</span> <span class="s1">&#39;your-app-name&#39;</span> <span class="c"># TODO: update me</span>
@@ -47,11 +48,15 @@ Modify it to look like this (<strong>don't change the app name</strong>):</p>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">[[</span><span class="nx">vm</span><span class="p">]]</span>
 </span></span><span class="line"><span class="cl"><span class="nx">size</span> <span class="p">=</span> <span class="s1">&#39;shared-cpu-1x&#39;</span>
-</span></span></code></pre><p>Deploy to fly.io by running:</p>
+</span></span></code></pre>
+<p>Deploy to fly.io by running:</p>
 <pre class="chroma"><code><span class="line"><span class="cl">flyctl launch
-</span></span></code></pre><p>Now open <a href="https://your-app-name.fly.dev">your-app-name.fly.dev</a>
+</span></span></code></pre>
+<p>Now open <a href="https://your-app-name.fly.dev">your-app-name.fly.dev</a>
 in your browser, and follow the setup wizard.
 Chose <strong>sqlite</strong> as your database, it will be automatically stored in <code>/var/www/FreshRSS/data</code>.</p>
 <h2>Setting up custom domain (optional)</h2>
 <pre class="chroma"><code><span class="line"><span class="cl">fly certs create rss.your-domain.com
-</span></span></code></pre><p>The output of this command will guide you through the records you need to add to your domain.</p></main><script>const root = document.documentElement;root.dataset.theme = localStorage.theme || 'dark';document.getElementById('theme-toggle').onclick = () => {root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';localStorage.theme = root.dataset.theme;};</script></body></html>
+</span></span></code></pre>
+<p>The output of this command will guide you through the records you need to add to your domain.</p>
+</main><script>const root = document.documentElement;root.dataset.theme = localStorage.theme || 'dark';document.getElementById('theme-toggle').onclick = () => {root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';localStorage.theme = root.dataset.theme;};</script></body></html>
