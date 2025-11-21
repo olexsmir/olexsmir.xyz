@@ -1,4 +1,4 @@
-name: publish
+name: ci
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Build and Push
+    name: ci
     steps:
       - name: Install nvim
         uses: rhysd/action-setup-vim@v1
@@ -17,6 +17,7 @@ jobs:
           neovim: true
           version: nightly
 
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
       - uses: actions/checkout@v4
 
       - name: install chroma
@@ -26,10 +27,18 @@ jobs:
           sudo mv chroma /usr/local/bin/chroma
           chroma --version
 
+      - name: build markdown parser
+        run: make build-parser
+
+      - name: tests
+        run: |
+          nvim --version
+          make test
+
       - name: build
         run: make build
 
-      - name: push to site branch
+      - name: publish
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self

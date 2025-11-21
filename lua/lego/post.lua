@@ -1,6 +1,6 @@
 local file = require "lego.file"
 local frontmatter = require "lego.frontmatter"
-local markdown = require "lego.markdown"
+local lib = require "liblego"
 local post = {}
 
 ---@class lego.Post
@@ -28,7 +28,7 @@ function post.read_file(fpath)
   return {
     meta = meta,
     hidden = hidden,
-    content = markdown(content),
+    content = vim.trim(lib.md_to_html(content)) or error "got nil, and not html",
   }
 end
 

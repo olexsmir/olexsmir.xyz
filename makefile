@@ -5,7 +5,12 @@ CMD=nvim --clean -u ./lua/minit.lua
 test:
 	@$(CMD) --headless -c "lua MiniTest.run()"
 
-build:
+
+build-parser:
+	@cargo build --release
+	@ln -sf $(CURDIR)/target/release/libolexsmir_xyz.so $(CURDIR)/lua/liblego.so
+
+build: build-parser
 	@$(CMD) -l ./lua/build.lua
 
 dev:
