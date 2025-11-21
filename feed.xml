@@ -3,8 +3,7 @@
 &lt;li&gt;Forcing my self to go outside and sleep well.&lt;/li&gt;
 &lt;li&gt;Enjoying programming.&lt;/li&gt;
 &lt;li&gt;Hating russia and wanting more of електрохарчування.&lt;/li&gt;
-&lt;/ul&gt;
-</content></entry><entry><title>FreshRSS on fly</title><link href="https://olexsmir.xyz/freshfly"></link><id>https://olexsmir.xyz/freshfly</id><updated>2025-11-10T00:00:00+02:00</updated><content type="html">&lt;h1&gt;The problem.&lt;/h1&gt;
+&lt;/ul&gt;</content></entry><entry><title>FreshRSS on fly</title><link href="https://olexsmir.xyz/freshfly"></link><id>https://olexsmir.xyz/freshfly</id><updated>2025-11-10T00:00:00+02:00</updated><content type="html">&lt;h1&gt;The problem.&lt;/h1&gt;
 &lt;p&gt;I&#39;m broke, and I like using FreshRSS.&lt;/p&gt;
 &lt;h1&gt;The solution.&lt;/h1&gt;
 &lt;p&gt;We&#39;ll be using &lt;a href=&quot;https://fly.io&quot;&gt;fly.io&lt;/a&gt;
@@ -64,7 +63,5 @@ Chose &lt;strong&gt;sqlite&lt;/strong&gt; as your database, it will be automatic
 &lt;h2&gt;Setting up custom domain (optional)&lt;/h2&gt;
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;fly certs create rss.your-domain.com
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The output of this command will guide you through the records you need to add to your domain.&lt;/p&gt;
-</content></entry><entry><title>Hello, World</title><link href="https://olexsmir.xyz/hello"></link><id>https://olexsmir.xyz/hello</id><updated>2025-09-30T00:00:00+02:00</updated><content type="html">&lt;p&gt;Here I&#39;ll ~~shit~~post about tech, and maybe even other stuff I&#39;m interested in.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;P.S&lt;/strong&gt; isn&#39;t it strange that we programmers have silently agreed put a comma in between hello and world.&lt;/p&gt;
-</content></entry></feed>
+&lt;p&gt;The output of this command will guide you through the records you need to add to your domain.&lt;/p&gt;</content></entry><entry><title>Hello, World</title><link href="https://olexsmir.xyz/hello"></link><id>https://olexsmir.xyz/hello</id><updated>2025-09-30T00:00:00+02:00</updated><content type="html">&lt;p&gt;Here I&#39;ll ~~shit~~post about tech, and maybe even other stuff I&#39;m interested in.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;P.S&lt;/strong&gt; isn&#39;t it strange that we programmers have silently agreed put a comma in between hello and world.&lt;/p&gt;</content></entry></feed>
