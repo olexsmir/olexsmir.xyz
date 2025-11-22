@@ -162,14 +162,14 @@ function pages.post(post)
 end
 
 function pages.gopkg(name, repo, branch)
-  local gomod = c.name .. "/" .. name
+  local gomod = c.cname .. "/" .. name
   local go_import = gomod .. " git " .. repo
   local go_source = table.concat({
     gomod,
     repo,
     repo .. "/tree/" .. branch .. "{/dir}",
     repo .. "/blob/" .. branch .. "{/dir}/{file}#L{line}",
-  }, "")
+  }, " ")
 
   return h.el("html", {}, {
     h.el("head", {}, {
