@@ -52,6 +52,7 @@ function blog.build()
   write_page("posts.html", pages.posts(posts))
 
   write_gopkg("rfcr", "https://tangled.org/olexsmir.xyz/rfcr")
+  write_gopkg("json2go", "https://github.com/olexsmir/json2go")
 
   -- stylua: ignore
   write("feed.xml", rss.rss(posts, {
