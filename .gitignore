@@ -1,0 +1,5 @@
+/.tests/
+/.lux/
+/build/
+*.so
+*.h

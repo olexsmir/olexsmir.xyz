@@ -1,0 +1,46 @@
+name: ci
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build and Push
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go/go.mod
+          cache-dependency-path: go/go.mod
+
+      - name: Install nvim
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: nightly
+
+      - name: build markdown parser
+        run: make build-parser
+
+      - name: tests
+        run: |
+          nvim --version
+          make test
+
+      - name: build
+        run: make build
+
+      - name: publish
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: gh-pages
+          FOLDER: build
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MESSAGE: "{msg}"
