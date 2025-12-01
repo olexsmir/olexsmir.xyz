@@ -4,4 +4,63 @@
 &lt;li&gt;Enjoying programming.&lt;/li&gt;
 &lt;li&gt;Hating russia and wanting more of електрохарчування.&lt;/li&gt;
 &lt;/ul&gt;
+</content></entry><entry><title>FreshRSS on fly</title><link href="https://olexsmir.xyz/freshfly"></link><id>https://olexsmir.xyz/freshfly</id><updated>2025-11-10T00:00:00+02:00</updated><content type="html">&lt;h1&gt;The problem.&lt;/h1&gt;
+&lt;p&gt;I&#39;m broke, and I like using FreshRSS.&lt;/p&gt;
+&lt;h1&gt;The solution.&lt;/h1&gt;
+&lt;p&gt;We&#39;ll be using &lt;a href=&quot;https://fly.io&quot;&gt;fly.io&lt;/a&gt;
+they have a generous &lt;a href=&quot;https://fly.io/docs/about/pricing&quot;&gt;free allowance&lt;/a&gt;.&lt;/p&gt;
+&lt;h2&gt;Setting up&lt;/h2&gt;
+&lt;p&gt;First, you have to &lt;a href=&quot;https://fly.io/app/sign-up&quot;&gt;sign up for fly account&lt;/a&gt;.
+&lt;a href=&quot;https://fly.io/docs/flyctl/install&quot;&gt;Get their cli&lt;/a&gt;, and login with &lt;code&gt;flyctl auth login&lt;/code&gt;.&lt;/p&gt;
+&lt;h2&gt;Deploying FreshRSS&lt;/h2&gt;
+&lt;p&gt;Create a directory where you&#39;ll store the &lt;code&gt;fly.toml&lt;/code&gt; file, &lt;code&gt;cd&lt;/code&gt; into this directory, we&#39;ll do our magic.&lt;/p&gt;
+&lt;p&gt;Now, we need to create an app on fly.io, using the following command:&lt;/p&gt;
+&lt;pre class=&quot;chroma&quot;&gt;&lt;code&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;flyctl app create --save
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;After this, you&#39;ll get an auto-generated &lt;code&gt;fly.toml&lt;/code&gt; file.
+&lt;br&gt;
+Modify it to look like this (&lt;strong&gt;don&#39;t change the app name&lt;/strong&gt;):&lt;/p&gt;
+&lt;pre class=&quot;chroma&quot;&gt;&lt;code&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;your-app-name&amp;#39;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# TODO: update me&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;nx&quot;&gt;primary_region&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;fra&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;nx&quot;&gt;kill_signal&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;SIGINT&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;c&quot;&gt;# Please check what the latest version is at: https://github.com/FreshRSS/FreshRSS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;c&quot;&gt;# and set it here&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;nx&quot;&gt;image&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;docker.io/freshrss/freshrss:1.27.1&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;nx&quot;&gt;CRON_MIN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;*/20&amp;#39;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# update feeds every 20 minutes&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;c&quot;&gt;# you don&amp;#39;t want your account and feeds to be deleted after a restart&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;mounts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;nx&quot;&gt;source&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;freshrss_data&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;nx&quot;&gt;destination&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/var/www/FreshRSS/data&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;c&quot;&gt;# you probably want this app to be accessible&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;nx&quot;&gt;protocol&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;tcp&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;nx&quot;&gt;internal_port&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;80&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;nx&quot;&gt;processes&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;app&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;nx&quot;&gt;port&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;80&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;nx&quot;&gt;handlers&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;http&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;nx&quot;&gt;force_https&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;nx&quot;&gt;port&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;443&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;nx&quot;&gt;handlers&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;tls&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;http&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;vm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;nx&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;shared-cpu-1x&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Deploy to fly.io by running:&lt;/p&gt;
+&lt;pre class=&quot;chroma&quot;&gt;&lt;code&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;flyctl launch
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now open &lt;a href=&quot;https://your-app-name.fly.dev&quot;&gt;your-app-name.fly.dev&lt;/a&gt;
+in your browser, and follow the setup wizard.
+Chose &lt;strong&gt;sqlite&lt;/strong&gt; as your database, it will be automatically stored in &lt;code&gt;/var/www/FreshRSS/data&lt;/code&gt;.&lt;/p&gt;
+&lt;h2&gt;Setting up custom domain (optional)&lt;/h2&gt;
+&lt;pre class=&quot;chroma&quot;&gt;&lt;code&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;fly certs create rss.your-domain.com
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The output of this command will guide you through the records you need to add to your domain.&lt;/p&gt;
+</content></entry><entry><title>Hello, World</title><link href="https://olexsmir.xyz/hello"></link><id>https://olexsmir.xyz/hello</id><updated>2025-09-30T00:00:00+02:00</updated><content type="html">&lt;pre class=&quot;chroma&quot;&gt;&lt;code&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;cl&quot;&gt;&lt;span class=&quot;nx&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#34;Hello, World!&amp;#34;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Here I&#39;ll &lt;del&gt;shit&lt;/del&gt;post about tech, and maybe even other stuff I&#39;m interested in.&lt;/p&gt;
 </content></entry></feed>
