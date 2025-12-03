@@ -37,7 +37,7 @@ local function with_page(o)
       },
       h.link { a.attr("rel", "stylesheet"), a.href "style.css" },
       o.has_code and h.link { a.attr("rel", "stylesheet"), a.href "chroma.css" } or {},
-      h.link { a.attr("rel", "icon"), a.href "assets/favicon.svg" },
+      h.link { a.attr("rel", "icon"), a.href "favicon.svg" },
       h.meta { a.attr("name", "description"), a.attr("content", o.desc) },
       h.meta { a.attr("property", "og:description"), a.attr("content", o.desc) },
       h.meta { a.attr("property", "og:site_name"), a.attr("content", o.title) },

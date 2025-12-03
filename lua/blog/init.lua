@@ -30,7 +30,7 @@ function blog.build()
     file.rm(c.build.output)
   end
   file.mkdir(c.build.output)
-  file.copy_dir(c.build.assets, vim.fs.joinpath(c.build.output, c.build.assets))
+  file.copy_dir(c.build.static, c.build.output)
 
   -- write the pages
   ---@type lego.Post[]
@@ -46,6 +46,7 @@ function blog.build()
   write("chroma.css", liblego.get_css(c.build.chroma_theme))
   write("sitemap.xml", sitemap.sitemap(posts, { site_url = c.url }))
   write("style.css", css.style(styles))
+  write(".nojekyll", "")
   write_page("404.html", pages.not_found())
   write_page("index.html", pages.home(posts))
   write_page("posts.html", pages.posts(posts))

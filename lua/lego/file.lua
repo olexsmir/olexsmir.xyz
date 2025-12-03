@@ -75,10 +75,9 @@ end
 function file.copy_dir(from, to)
   from = file.to_path(from)
   to = file.to_path(to)
-  vim.print("copying " .. to)
-
   file.mkdir(to)
   for _, f in ipairs(vim.fn.readdir(from)) do
+    vim.print("copying " .. f .. " into " .. to)
     vim.uv.fs_copyfile(vim.fs.joinpath(from, f), vim.fs.joinpath(to, f))
   end
 end

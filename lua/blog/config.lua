@@ -12,9 +12,8 @@ config.feed = {
 
 config.build = {
   chroma_theme = "tokyonight-night",
-
   output = "build",
-  assets = "assets",
+  static = "static",
   posts = "posts",
 }
 
