@@ -8,6 +8,11 @@ return {
     ["--text-mutted"] = text_mutted,
     ["--link-color"] = "#82aee3",
     ["--code-background-color"] = "#2d2d2d",
+    ["--callout-note-border"] = "#1f6feb",
+    ["--callout-tip-border"] = "#238636",
+    ["--callout-warn-border"] = "#9e6a03",
+    ["--callout-important-border"] = "#ab7df8",
+    ["--callout-caution-border"] = "#da3633",
   },
 
   ["[data-theme='light']"] = {
@@ -150,5 +155,38 @@ return {
     background_color = "var(--code-background-color)",
     white_space = "pre-wrap",
     padding = "0 0.3em",
+  },
+
+  -- -- CALLOUTS
+  [".callout-content"] = { padding_left = "0.5em" },
+  ["details[data-callout]"] = {
+    border_radius = "2px",
+    margin = "1em 0",
+    padding = "0.2em 1em",
+  },
+
+  ["details[data-callout=NOTE]"] = {
+    border_left = "4px solid var(--callout-note-border)",
+    summary = { color = "var(--callout-note-border)" },
+  },
+
+  ["details[data-callout=TIP]"] = {
+    border_left = "4px solid var(--callout-tip-border)",
+    summary = { color = "var(--callout-tip-border)" },
+  },
+
+  ["details[data-callout=WARNING]"] = {
+    border_left = "4px solid var(--callout-warn-border)",
+    summary = { color = "var(--callout-warn-border)" },
+  },
+
+  ["details[data-callout=IMPORTANT]"] = {
+    border_left = "4px solid var(--callout-important-border)",
+    summary = { color = "var(--callout-important-border)" },
+  },
+
+  ["details[data-callout=CAUTION]"] = {
+    border_left = "4px solid var(--callout-caution-border)",
+    summary = { color = "var(--callout-caution-border)" },
   },
 }

@@ -12,6 +12,7 @@ import (
 	"github.com/alecthomas/chroma/v2/styles"
 	treeblood "github.com/wyatt915/goldmark-treeblood"
 	"github.com/yuin/goldmark"
+	emoji "github.com/yuin/goldmark-emoji"
 	highlighting "github.com/yuin/goldmark-highlighting/v2"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/renderer/html"
@@ -39,8 +40,10 @@ func md_to_html(input *C.char) *C.char {
 			extension.NewFootnote(
 				extension.WithFootnoteIDPrefix([]byte("footnote")),
 			),
+			extension.Linkify,
 			treeblood.MathML(),
 			callout.CalloutExtention,
+			emoji.Emoji,
 		),
 		goldmark.WithRendererOptions(html.WithUnsafe()),
 	)
