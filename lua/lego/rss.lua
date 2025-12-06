@@ -24,7 +24,9 @@ end
 function rss.rss(posts, config)
   local entries = vim
     .iter(posts)
-    ---@param post lego.Post
+    :filter(function(post)
+      return not post.hidden_fully
+    end)
     :map(function(post)
       return h.el("entry", {}, {
         h.title({}, { h.text(post.meta.title) }),

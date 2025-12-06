@@ -6,6 +6,7 @@ local post = {}
 ---@class lego.Post
 ---@field content string
 ---@field hidden boolean
+---@field hidden_fully boolean
 ---@field meta lego.PostMeta
 
 ---@class lego.PostMeta
@@ -20,14 +21,14 @@ function post.read_file(fpath)
   local p = file.read(fpath)
   local content = table.concat(frontmatter.content(p) or {}, "\n")
   local meta = frontmatter.extract(p)
-  local hidden = meta["hidden"] == "true"
   assert(meta["title"] ~= nil, (file.to_path(fpath) .. " doesn't have title"))
   assert(meta["date"] ~= nil, (file.to_path(fpath) .. " doesn't have date"))
   assert(meta["slug"] ~= nil, (file.to_path(fpath) .. " doesn't have slug"))
 
   return {
     meta = meta,
-    hidden = hidden,
+    hidden = meta["hidden"] == "true",
+    hidden_fully = meta["hidden"] == "true, true",
     content = liblego.md_to_html(content),
   }
 end

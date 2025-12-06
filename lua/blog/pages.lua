@@ -70,7 +70,7 @@ local function list_posts(iter)
     iter
       ---@param post lego.Post
       :filter(function(post)
-        return not post.hidden
+        return not (post.hidden or post.hidden_fully)
       end)
       ---@param post lego.Post
       :map(function(post)
