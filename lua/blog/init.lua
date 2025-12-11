@@ -52,6 +52,7 @@ function blog.build()
   write_page("posts.html", pages.posts(posts))
 
   write_gopkg("json2go", "https://github.com/olexsmir/json2go")
+  write_gopkg("smutok", "https://github.com/olexsmir/smutok")
   write_gopkg("x", "https://github.com/olexsmir/x")
 
   -- stylua: ignore
