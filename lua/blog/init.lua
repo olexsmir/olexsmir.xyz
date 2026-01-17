@@ -53,6 +53,7 @@ function blog.build()
 
   write_gopkg("json2go", "https://github.com/olexsmir/json2go")
   write_gopkg("moviefeed", "https://github.com/olexsmir/moviefeed")
+  write_gopkg("mugit", "https://github.com/olexsmir/mugit")
   write_gopkg("smutok", "https://github.com/olexsmir/smutok")
   write_gopkg("x", "https://github.com/olexsmir/x")
 
