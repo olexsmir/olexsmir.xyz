@@ -33,23 +33,23 @@ function blog.build()
   file.copy_dir(c.build.static, c.build.output)
 
   -- write the pages
-  ---@type lego.Post[]
-  local posts = vim
-    .iter(file.list_dir(c.build.posts))
-    :map(function(fname)
-      return post.read_file { c.build.posts, fname }
-    end)
-    :totable()
-  post.sort_by_date(posts)
+  -- ---@type lego.Post[]
+  -- local posts = vim
+  --   .iter(file.list_dir(c.build.posts))
+  --   :map(function(fname)
+  --     return post.read_file { c.build.posts, fname }
+  --   end)
+  --   :totable()
+  -- post.sort_by_date(posts)
 
   write("CNAME", c.cname)
   write("chroma.css", liblego.get_css(c.build.chroma_theme))
-  write("sitemap.xml", sitemap.sitemap(posts, { site_url = c.url }))
+  -- write("sitemap.xml", sitemap.sitemap(posts, { site_url = c.url }))
   write("style.css", css.style(styles))
   write(".nojekyll", "")
   write_page("404.html", pages.not_found())
-  write_page("index.html", pages.home(posts))
-  write_page("posts.html", pages.posts(posts))
+  write_page("index.html", pages.home())
+  -- write_page("posts.html", pages.posts(posts))
 
   write_gopkg("json2go", "https://github.com/olexsmir/json2go")
   write_gopkg("moviefeed", "https://github.com/olexsmir/moviefeed")
@@ -58,21 +58,21 @@ function blog.build()
   write_gopkg("x", "https://github.com/olexsmir/x")
 
   -- stylua: ignore
-  write("feed.xml", rss.rss(posts, {
-    email = c.email,
-    name = c.name,
-    title = c.title,
-    subtitle = c.feed.subtitle;
-    feed_url = c.feed.url,
-    home_url = c.url,
-  }))
+  -- write("feed.xml", rss.rss(posts, {
+  --   email = c.email,
+  --   name = c.name,
+  --   title = c.title,
+  --   subtitle = c.feed.subtitle;
+  --   feed_url = c.feed.url,
+  --   home_url = c.url,
+  -- }))
+  --
+  -- for _, p in pairs(posts) do
+  --   local phtml = html.render_page(pages.post(p))
+  --   write(p.meta.slug .. ".html", phtml)
+  -- end
 
-  for _, p in pairs(posts) do
-    local phtml = html.render_page(pages.post(p))
-    write(p.meta.slug .. ".html", phtml)
-  end
-
-  file.report_duplicates()
+  -- file.report_duplicates()
 end
 
 return blog

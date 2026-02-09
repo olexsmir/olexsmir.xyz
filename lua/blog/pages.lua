@@ -45,79 +45,29 @@ local function with_page(o)
       h.meta { a.attr("property", "og:type"), a.attr("content", "website") },
     }),
     h.el("body", { a.class "home" }, {
-      h.el("header", {}, {
-        h.nav({}, {
-          h.p({}, {
-            h.a({ a.class "visual-hidden", a.href "#main" }, { "Skip to content" }),
-            h.a({ a.href "/" }, { h.text "home" }),
-            h.a({ a.href "/posts" }, { h.text "posts" }),
-            h.a({ a.href "/feed.xml" }, { h.text "feed" }),
-            h.el("button", { a.id "theme-toggle" }, { h.text "🌓" }),
-          }),
-        }),
-      }),
+      -- h.el("header", {}, {
+      --   h.nav({}, {
+      --     h.p({}, {
+      --       h.a({ a.class "visual-hidden", a.href "#main" }, { "Skip to content" }),
+      --       h.a({ a.href "/" }, { h.text "home" }),
+      --       h.a({ a.href "/posts" }, { h.text "posts" }),
+      --       h.a({ a.href "/feed.xml" }, { h.text "feed" }),
+      --       h.el("button", { a.id "theme-toggle" }, { h.text "🌓" }),
+      --     }),
+      --   }),
+      -- }),
       h.main({ a.id "main" }, o.body),
       themeSwitcherScript(),
     }),
   })
 end
 
----@param iter Iter
----@return string|lego._HtmlNote
-local function list_posts(iter)
-  return h.ul(
-    { a.class "blog-posts" },
-    iter
-      ---@param post lego.Post
-      :filter(function(post)
-        return not (post.hidden or post.hidden_fully)
-      end)
-      ---@param post lego.Post
-      :map(function(post)
-        return h.li({}, {
-          h.span({}, {
-            h.el("i", {}, { h.time(post.meta.date) }),
-          }),
-          h.a({ a.href(post.meta.slug) }, { h.text(post.meta.title) }),
-        })
-      end)
-      :totable()
-  )
-end
-
----@param posts lego.Post[]
-function pages.home(posts)
+function pages.home()
   return with_page {
     title = "olexsmir.xyz",
     desc = "olexsmir.xyz home page",
     body = {
-      h.h2({}, { "Hi, I'm Olex from Ukraine 🇺🇦" }),
-      h.p({}, {
-        "Welcome to my corner of the internet. Here I share what I find interesting. ",
-        "Hopefully I will maintain the content on this site, not only it’s code.",
-      }),
-      h.p({}, {
-        "Feel free to scroll through the posts below or subscribe to the ",
-        h.a({ a.href "/feed.xml" }, { "RSS feed" }),
-        " for updates. ",
-        "And if you want to say hi, mail me at ",
-        h.a({ a.href("mailto:" .. c.email) }, { c.email }),
-        " or message me on ",
-        h.a({ a.href "https://t.me/olexsmir" }, { "telegram" }),
-        " if that's your cup of tea.",
-      }),
-      h.p({}, {
-        "If you’re curious what I’m up to, check out ",
-        h.a({ a.href "/now" }, { "now" }),
-        " page, or look through ",
-        h.a({ a.href "https://github.com/olexsmir" }, { "github" }),
-        " or ",
-        h.a({ a.href "https://tangled.org/olexsmir.xyz" }, { "tangled" }),
-        " accounts.",
-      }),
-      h.div({ a.class "recent-posts" }, {
-        list_posts(vim.iter(posts):take(7)),
-      }),
+      h.h2({}, { "TODO make the site" }),
     },
   }
 end
@@ -132,31 +82,6 @@ function pages.not_found()
         h.text "Go pack to the ",
         h.a({ a.href "/" }, { h.text "home page" }),
       }),
-    },
-  }
-end
-
----@param posts lego.Post[]
-function pages.posts(posts)
-  return with_page {
-    title = "All olexsmir's posts",
-    desc = "List of all blog posts on the lego.",
-    body = { list_posts(vim.iter(posts)) },
-  }
-end
-
----@param post lego.Post
-function pages.post(post)
-  return with_page {
-    title = post.meta.title,
-    desc = "Blog post titled: " .. post.meta.title,
-    has_code = post.content:match "code" ~= nil,
-    body = {
-      h.div({ a.class "blog-title" }, {
-        h.h1({}, { h.text(post.meta.title) }),
-        h.p({}, { h.time(post.meta.date) }),
-      }),
-      h.raw(post.content),
     },
   }
 end
