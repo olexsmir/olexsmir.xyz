@@ -19,6 +19,7 @@ const (
 func main() {
 	_ = os.RemoveAll(outputDir)
 	_ = os.Mkdir(outputDir, 0711)
+	fmt.Println("copying static/ to", outputDir)
 	_ = os.CopyFS(outputDir, os.DirFS("static"))
 
 	_ = writeFile(".nojekyll", "")
@@ -35,13 +36,15 @@ func main() {
 }
 
 func writeFile(dst, content string) error {
+	fmt.Println("writing:", dst)
 	return os.WriteFile(filepath.Join(outputDir, dst), []byte(content), 0711)
 }
 
-func writeGopkg(pkg, repoUrl string) error {
+func writeGopkg(pkg, repoURL string) error {
 	return writeTemplate("gopkg.html", pkg+".html", map[string]any{
 		"Gomod":   cname + "/" + pkg,
-		"RepoUrl": repoUrl,
+		"RepoUrl": repoURL,
+		"Branch":  "main",
 	})
 }
 
@@ -51,6 +54,8 @@ func writeTemplate(name, output string, data map[string]any) error {
 		return err
 	}
 	var buf bytes.Buffer
-	err = tmpl.Execute(&buf, data)
+	if err = tmpl.Execute(&buf, data); err != nil {
+		return err
+	}
 	return writeFile(output, buf.String())
 }

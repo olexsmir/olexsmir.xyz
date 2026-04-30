@@ -3,10 +3,16 @@
   <head>
     <meta charset="utf-8">
     <title>{{.Gomod}}</title>
-    <meta name="go-import" content="{{.RepoUrl}} git {{.RepoUrl}}">
+    <meta name="go-import" content="{{.Gomod}} git {{.RepoUrl}}">
+    <meta name="go-source" content="{{.Gomod}} {{.RepoUrl}} {{.RepoUrl}}/tree/{{.Branch}}{/dir} {{.RepoUrl}}/blob/{{.Branch}}{/dir}/{file}#L{line}">
   </head>
   <body>
-    <p>Source: <a href="{{.RepoUrl}}">{{.RepoUrl}}</a></p>
+    <p>
+        Source: <a href="{{.RepoUrl}}">{{.RepoUrl}}</a>
+        <br>
+        Doc: <a href="https://pkg.go.dev/{{.Gomod}}">https://pkg.go.dev/{{.Gomod}}</a>
+    </p>
+    <p></p>
     <code>$ go get {{.Gomod}}</code>
   </body>
 </html>
