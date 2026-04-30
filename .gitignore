@@ -1,5 +1,2 @@
-/.tests/
-/.lux/
-/build/
-*.so
-*.h
+/_site/
+/main

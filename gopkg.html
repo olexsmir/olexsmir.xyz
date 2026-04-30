@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{.Gomod}}</title>
+    <meta name="go-import" content="{{.RepoUrl}} git {{.RepoUrl}}">
+  </head>
+  <body>
+    <p>Source: <a href="{{.RepoUrl}}">{{.RepoUrl}}</a></p>
+    <code>$ go get {{.Gomod}}</code>
+  </body>
+</html>
