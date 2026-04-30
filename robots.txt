@@ -1,7 +1,7 @@
 # https://github.com/ai-robots-txt/ai.robots.txt/blob/main/robots.txt
 # https://codeberg.org/bbbhltz/pages/src/branch/master/robots.txt
 
-Sitemap: https://olexsmir.xyz/sitemap.xml
+# Sitemap: https://olexsmir.xyz/sitemap.xml # todo: fix me
 
 User-agent: AcademicBotRTU
 User-agent: AddSearchBot
