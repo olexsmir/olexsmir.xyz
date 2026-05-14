@@ -29,6 +29,7 @@ func main() {
 	_ = writeTemplate("404.html", "404.html", nil)
 
 	_ = writeGopkg("json2go", "https://github.com/olexsmir/json2go")
+	_ = writeGopkg("clerk", "https://git.olexsmir.xyz/clerk")
 	_ = writeGopkg("mugit", "https://git.olexsmir.xyz/mugit")
 	_ = writeGopkg("x", "https://github.com/olexsmir/x")
 
