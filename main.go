@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // note: as for posts; i will write them in html, which would be easier for
@@ -25,6 +26,7 @@ func main() {
 	_ = writeFile(".nojekyll", "")
 	_ = writeFile("CNAME", cname)
 
+	_ = writeStyles("style.css")
 	_ = writeTemplate("index.html", "index.html", nil)
 	_ = writeTemplate("404.html", "404.html", nil)
 
@@ -58,5 +60,19 @@ func writeTemplate(name, output string, data map[string]any) error {
 	if err = tmpl.Execute(&buf, data); err != nil {
 		return err
 	}
-	return writeFile(output, buf.String())
+	out := minifyWebFile(buf.String())
+	return writeFile(output, out)
+}
+
+func writeStyles(file string) error {
+	in, err := os.ReadFile(file)
+	if err != nil {
+		return nil
+	}
+	out := minifyWebFile(string(in))
+	return writeFile(file, out)
+}
+
+func minifyWebFile(cnt string) string {
+	return strings.NewReplacer("    ", "", "  ", "", "\t", "", "\n", "").Replace(cnt)
 }
