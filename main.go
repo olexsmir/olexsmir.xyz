@@ -34,13 +34,18 @@ func main() {
 	_ = writeGopkg("clerk", "https://git.olexsmir.xyz/clerk")
 	_ = writeGopkg("mugit", "https://git.olexsmir.xyz/mugit")
 	_ = writeGopkg("x", "https://github.com/olexsmir/x")
+	_ = writeGopkg("x/ratelimit", "https://github.com/olexsmir/x")
 
 	fmt.Println("site generated")
 }
 
 func writeFile(dst, content string) error {
+	full := filepath.Join(outputDir, dst)
+	if err := os.MkdirAll(filepath.Dir(full), 0755); err != nil {
+		return err
+	}
 	fmt.Println("writing:", dst)
-	return os.WriteFile(filepath.Join(outputDir, dst), []byte(content), 0711)
+	return os.WriteFile(full, []byte(content), 0711)
 }
 
 func writeGopkg(pkg, repoURL string) error {
